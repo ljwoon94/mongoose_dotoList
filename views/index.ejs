@@ -29,34 +29,12 @@
                 <form action="/api/remove/<%=todos[i]._id %>" method="post">
                     <input type="submit" id="remove_btn" value ="삭제">
                 </form>
-                <!-- 수정할때 나오는 창
-                <div class="replyModal">
-                    <div class="modalContent">
-                        <div>
-                            <textarea class="modal_repCon" name="modal_repCon"><%= todos[i].content %></textarea>
-                        </div>
-                        <div>
-                            <button type="button" class="modal_modify_btn">수정</button>
-                            <button type="button" class="modal_cancel">취소</button>
-                        </div>
-                        </div>
-                    <div class="modalBackground"></div>
-                </div> -->
             
         <% } %>
     </div>
-
-    
-
-<!-- <script>
-    $(".modify_btn").click(function(){
-        
-        $(".replyModal").attr("style", "display:block;");
-
-    });
-    $(".modal_cancel").click(function(){
-        $(".replyModal").attr("style", "display:none;");
-    });
-</script> -->
+    <form method="POST" enctype="multipart/form-data" action="/upload/api/post">
+        <input type = "file" name="file_upload"/>
+        <input type = "submit" value = "업로드"/>
+    </form>
 </body>
 </html>

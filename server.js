@@ -7,8 +7,13 @@ const server = http.createServer(app);
 // ejs가 잇으면 서버(script)에서 보낸 변수를 가져와 사용가능
 const ejs = require("ejs");
 const path = require('path');
-const todolistRouter = require('./routes/v1/todolist')
+// 업로드될 파일을 저장할 폴더를 생성하기 위해 사용
+const fs = require('fs');
 
+
+// router
+const todolistRouter = require('./routes/todolist/v1/todolist');
+const {uploadRouter} = require('./routes/upload/v1/uploadRouter');
 
 // mongoDB 주소
 const db_url = 'mongodb+srv://admin:roottoor@mongodbtutorial.fvm0n.mongodb.net/todoList?retryWrites=true&w=majority';
@@ -33,9 +38,13 @@ mongoose
   .then(() => console.log('Successfully connected to mongodb'))
   .catch(e => console.error(e));
 
-app.use('/', todolistRouter)
+app.use('/', todolistRouter);
+app.use('/upload', uploadRouter);
 
 
 server.listen(port, (err) => {
     console.log(`Server listening on port ${port}`)
+    //fs.existsSync()함수로 폴더가 존재하는지 확인하고, 없으면 fs.mkdirSync()함수로 폴더를 생성
+    const dir = './uploadedFiles';
+    if(!fs.existsSync(dir)) fs.mkdirSync(dir);
 });
