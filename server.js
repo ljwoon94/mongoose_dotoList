@@ -7,8 +7,8 @@ const server = http.createServer(app);
 // ejs가 잇으면 서버(script)에서 보낸 변수를 가져와 사용가능
 const ejs = require("ejs");
 const path = require('path');
+const todolistRouter = require('./routes/v1/todolist')
 
-const ToDoModel = require("./models/todolist");
 
 // mongoDB 주소
 const db_url = 'mongodb+srv://admin:roottoor@mongodbtutorial.fvm0n.mongodb.net/todoList?retryWrites=true&w=majority';
@@ -33,43 +33,8 @@ mongoose
   .then(() => console.log('Successfully connected to mongodb'))
   .catch(e => console.error(e));
 
+app.use('/', todolistRouter)
 
-app.get("/", (req, res) => {
-    ToDoModel.find({}, (err, todos) => {
-        res.render("index", {todos : todos});
-    });
-});
-
-// Access the parse results as request.body
-app.post('/api/todolist', (req, res) => {
-    console.log(req.body.content);
-    const addToDoList = new ToDoModel({content : req.body.content});
-    //res.status(302).redirect('/');
-    addToDoList.save((err)=>{
-        if(err) throw err
-            res.redirect('/');
-        })
-    
-});
-
-app.post('/api/update/:id',(req,res) =>{
-    const id = req.params.id;
-    console.log(req.body);
-    ToDoModel.findByIdAndUpdate( id, {content : req.body.content}, err => {
-        if(err) return res.send(500, err);
-            res.redirect('/');
-    });
-});
-
-app.post('/api/remove/:id',(req,res) =>{
-    const id = req.params.id;
-    console.log(req.body);
-    ToDoModel.findByIdAndRemove( id, err => {
-        if(err) return res.send(500, err);
-            res.redirect('/');
-        
-    });
-});
 
 server.listen(port, (err) => {
     console.log(`Server listening on port ${port}`)
